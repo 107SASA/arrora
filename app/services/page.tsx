@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { sanityClient, servicesQuery } from '@/lib/sanity'
 import { LightbulbIcon, GavelIcon, BuildingIcon, PenToolIcon, WhatsAppIcon } from '@/components/ui/Icons'
 
 function ServiceIcon({ slug }: { slug: string }) {
@@ -28,14 +27,8 @@ const staticServices = [
   { title: 'Designs & GI', slug: 'designs-gi', pain: "Your product's distinctive look deserves protection.", description: "Your product's look and geographical origin are just as protectable as its name. We handle industrial design registration and Geographical Indication applications.", features: ['Industrial Design Registration', 'Design Infringement', 'GI Application Filing', 'GI Tag Protection', 'Product Design Audit', 'International Design'] },
 ]
 
-export default async function ServicesPage() {
-  let services = []
-  try {
-    services = await sanityClient.fetch(servicesQuery)
-  } catch {
-    // Sanity not configured yet
-  }
-  const items = services.length > 0 ? services : staticServices
+export default function ServicesPage() {
+  const items = staticServices
 
   return (
     <>

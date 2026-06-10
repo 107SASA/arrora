@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import { sanityClient, testimonialsQuery } from '@/lib/sanity'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
@@ -16,14 +15,8 @@ const staticTestimonials = [
   { name: 'Amit Bose', business: 'Manufacturing Co.', location: 'Kolkata', service: 'Patent', quote: "We had a unique industrial design we needed to protect quickly. The team filed our design application promptly and got us the protection we needed before our product launch.", initial: 'A', rating: 5 },
 ]
 
-export default async function TestimonialsPage() {
-  let testimonials = []
-  try {
-    testimonials = await sanityClient.fetch(testimonialsQuery)
-  } catch {
-    // Sanity not configured yet
-  }
-  const items = testimonials.length > 0 ? testimonials : staticTestimonials
+export default function TestimonialsPage() {
+  const items = staticTestimonials
 
   return (
     <>

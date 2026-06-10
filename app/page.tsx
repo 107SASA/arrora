@@ -8,7 +8,6 @@ import FoundersPreview from '@/components/home/FoundersPreview'
 import TestimonialsPreview from '@/components/home/TestimonialsPreview'
 import IndustriesRow from '@/components/home/IndustriesRow'
 import CTABanner from '@/components/home/CTABanner'
-import { sanityClient, testimonialsQuery } from '@/lib/sanity'
 
 export const metadata: Metadata = {
   title: 'V.S. Arora & Co. | IP Attorneys & Advocates, Kolkata',
@@ -36,14 +35,7 @@ const structuredData = {
   areaServed: 'India',
 }
 
-export default async function HomePage() {
-  let testimonials = []
-  try {
-    testimonials = await sanityClient.fetch(testimonialsQuery)
-  } catch {
-    // Sanity not configured yet — static fallback used
-  }
-
+export default function HomePage() {
   return (
     <>
       <script
@@ -56,7 +48,7 @@ export default async function HomePage() {
       <HowItWorks />
       <WhyUs />
       <FoundersPreview />
-      <TestimonialsPreview data={testimonials} />
+      <TestimonialsPreview />
       <IndustriesRow />
       <CTABanner />
     </>
