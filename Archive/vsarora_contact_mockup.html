@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VS Arora — Contact Us Mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600;700&display=swap');
+:root{
+  --navy:#0B1829;--navy2:#132338;--gold:#C49A2A;--gold2:#E2B84A;
+  --pale:#F5EDD4;--cream:#FAF7F2;--text:#1A2533;--mid:#64748B;
+  --border:#EDE9E0;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Outfit',sans-serif;background:#EDEBE5;color:var(--text);}
+
+/* annotations */
+.ann-wrap{position:relative;}
+.ann{position:absolute;top:-11px;right:-10px;font-size:9.5px;font-weight:700;
+  padding:3px 9px;border-radius:20px;z-index:60;white-space:nowrap;
+  letter-spacing:.04em;pointer-events:none;}
+.ann.red{background:#EF4444;color:#fff;box-shadow:0 2px 8px rgba(239,68,68,.4);}
+.ann.gold{background:var(--gold);color:var(--navy);box-shadow:0 2px 8px rgba(196,154,42,.4);}
+.ann.blue{background:#2563EB;color:#fff;box-shadow:0 2px 8px rgba(37,99,235,.35);}
+.ann.green{background:#16A34A;color:#fff;box-shadow:0 2px 8px rgba(22,163,74,.35);}
+
+/* page shell */
+.page-wrap{max-width:1280px;margin:0 auto;background:#fff;
+  box-shadow:0 0 80px rgba(0,0,0,.13);}
+
+/* topbar */
+.topbar{background:var(--navy2);padding:8px 60px;
+  display:flex;justify-content:space-between;align-items:center;}
+.tb-l{display:flex;gap:22px;font-size:11.5px;color:rgba(255,255,255,.6);}
+.tb-r{display:flex;align-items:center;gap:14px;}
+.wa-pill{background:#25D366;color:#fff;font-size:11px;font-weight:600;
+  padding:5px 13px;border-radius:20px;display:flex;align-items:center;gap:5px;}
+.call-pill{color:var(--gold2);font-size:12px;font-weight:600;}
+
+/* nav */
+.nav{background:#fff;padding:0 60px;display:flex;
+  align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--border);
+  box-shadow:0 2px 14px rgba(0,0,0,.05);
+  position:sticky;top:0;z-index:40;}
+.logo-name{font-family:'Cormorant Garamond',serif;font-size:21px;
+  font-weight:700;color:var(--navy);padding:18px 0;}
+.logo-tag{font-size:9.5px;color:var(--mid);letter-spacing:.12em;
+  text-transform:uppercase;margin-top:2px;}
+.nav-links{display:flex;align-items:center;gap:2px;}
+.nav-link{padding:21px 13px;font-size:13px;font-weight:500;
+  color:var(--text);cursor:pointer;border-bottom:3px solid transparent;}
+.nav-link.active{color:var(--gold);border-bottom-color:var(--gold);}
+.nav-cta{background:var(--gold);color:var(--navy);font-size:12.5px;
+  font-weight:700;padding:10px 22px;border-radius:6px;margin-left:16px;}
+
+/* breadcrumb */
+.bc{background:var(--cream);padding:11px 60px;border-bottom:1px solid var(--border);
+  font-size:12px;color:var(--mid);display:flex;align-items:center;gap:8px;}
+.bc-sep{color:#CBD5E1;}.bc-cur{color:var(--navy);font-weight:600;}
+
+/* section helpers */
+.sec-label{display:flex;align-items:center;gap:10px;margin-bottom:11px;}
+.sl-line{width:24px;height:2px;background:var(--gold);}
+.sl-text{font-size:10.5px;font-weight:700;color:var(--gold);
+  text-transform:uppercase;letter-spacing:.14em;}
+.sec-h2{font-family:'Cormorant Garamond',serif;font-size:34px;
+  font-weight:700;color:var(--navy);line-height:1.2;margin-bottom:12px;}
+.sec-p{font-size:14.5px;color:#4B5563;line-height:1.8;}
+
+/* footer */
+.footer{background:#07111E;padding:44px 60px 26px;}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;
+  gap:36px;margin-bottom:32px;}
+.fb-name{font-family:'Cormorant Garamond',serif;font-size:19px;
+  font-weight:700;color:#fff;margin-bottom:3px;}
+.fb-tag{font-size:9.5px;color:var(--gold);text-transform:uppercase;
+  letter-spacing:.1em;margin-bottom:13px;}
+.fb-p{font-size:12px;color:rgba(255,255,255,.45);line-height:1.7;margin-bottom:13px;}
+.fb-contact{font-size:12px;color:rgba(255,255,255,.55);line-height:1.9;}
+.fc-h{font-size:10.5px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.1em;color:rgba(255,255,255,.35);margin-bottom:13px;}
+.fc-ul{list-style:none;}
+.fc-ul li{font-size:12.5px;color:rgba(255,255,255,.55);padding:3px 0;}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.06);padding-top:18px;
+  display:flex;justify-content:space-between;align-items:center;}
+.footer-bottom p{font-size:11px;color:rgba(255,255,255,.28);}
+
+/* floating WA */
+.fwa{position:fixed;bottom:28px;right:28px;width:52px;height:52px;
+  background:#25D366;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-size:22px;box-shadow:0 4px 20px rgba(37,211,102,.45);
+  cursor:pointer;z-index:1000;}
+.fwa-ring{position:absolute;inset:-6px;border-radius:50%;
+  border:2px solid rgba(37,211,102,.3);animation:pulse 2s infinite;}
+@keyframes pulse{0%{transform:scale(1);opacity:1;}100%{transform:scale(1.4);opacity:0;}}
+
+/* annotation legend */
+.ann-legend{background:#0E0E1F;padding:22px 40px 40px;border-top:4px solid var(--gold);}
+.al-title{font-family:'Cormorant Garamond',serif;font-size:20px;color:#fff;
+  margin-bottom:5px;padding-top:6px;}
+.al-sub{font-size:12px;color:rgba(255,255,255,.4);margin-bottom:20px;}
+.al-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;}
+.al-note{border-left:3px solid;border-radius:0 6px 6px 0;
+  padding:11px 13px;background:rgba(255,255,255,.04);}
+.al-note.r{border-color:#EF4444;}.al-note.g{border-color:var(--gold);}
+.al-note.b{border-color:#3B82F6;}.al-note.gr{border-color:#22C55E;}
+.al-lbl{font-size:9px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.1em;margin-bottom:4px;}
+.al-note.r .al-lbl{color:#F87171;}.al-note.g .al-lbl{color:var(--gold2);}
+.al-note.b .al-lbl{color:#60A5FA;}.al-note.gr .al-lbl{color:#4ADE80;}
+.al-txt{font-size:11.5px;color:rgba(255,255,255,.7);line-height:1.55;}
+
+/* hero */
+.c-hero{background:var(--navy);padding:56px 60px;
+  position:relative;overflow:hidden;text-align:center;}
+.c-hero::before{content:'';position:absolute;inset:0;
+  background-image:linear-gradient(rgba(196,154,42,.03) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(196,154,42,.03) 1px,transparent 1px);
+  background-size:56px 56px;pointer-events:none;}
+.ch-eyebrow{display:flex;align-items:center;justify-content:center;
+  gap:10px;margin-bottom:16px;}
+.ch-line{width:24px;height:2px;background:var(--gold);}
+.ch-ey{font-size:10.5px;font-weight:700;color:var(--gold);
+  text-transform:uppercase;letter-spacing:.14em;}
+.ch-h1{font-family:'Cormorant Garamond',serif;font-size:42px;
+  font-weight:700;color:#fff;line-height:1.15;margin-bottom:12px;
+  position:relative;z-index:1;}
+.ch-h1 em{color:var(--gold2);font-style:italic;}
+.ch-sub{font-size:15px;color:rgba(255,255,255,.65);
+  line-height:1.7;max-width:520px;margin:0 auto;
+  position:relative;z-index:1;}
+
+/* 3-method cards */
+.method-section{background:var(--cream);padding:44px 60px;
+  border-bottom:1px solid var(--border);}
+.method-grid{display:grid;grid-template-columns:repeat(3,1fr);
+  gap:20px;margin-top:28px;}
+.method-card{background:#fff;border:1px solid var(--border);
+  border-radius:12px;padding:28px 24px;text-align:center;
+  cursor:pointer;transition:all .2s;position:relative;overflow:hidden;}
+.method-card::before{content:'';position:absolute;
+  bottom:0;left:0;right:0;height:3px;background:var(--gold);
+  transform:scaleX(0);transition:transform .3s;transform-origin:center;}
+.method-card:hover{box-shadow:0 6px 24px rgba(0,0,0,.08);}
+.method-card:hover::before{transform:scaleX(1);}
+.method-card.wa-card{border-color:rgba(37,211,102,.3);background:#F0FDF4;}
+.method-card.wa-card::before{background:#25D366;}
+.mc-icon{font-size:32px;margin-bottom:14px;}
+.mc-title{font-family:'Cormorant Garamond',serif;font-size:20px;
+  font-weight:700;color:var(--navy);margin-bottom:6px;}
+.mc-value{font-size:14px;font-weight:600;color:var(--gold);
+  margin-bottom:8px;}
+.mc-desc{font-size:12.5px;color:var(--mid);line-height:1.6;margin-bottom:16px;}
+.mc-btn{display:inline-block;padding:9px 20px;border-radius:6px;
+  font-size:12.5px;font-weight:700;cursor:pointer;}
+.mc-btn.gold{background:var(--gold);color:var(--navy);}
+.mc-btn.dark{background:var(--navy);color:#fff;}
+.mc-btn.green{background:#25D366;color:#fff;}
+.mc-response{font-size:11px;color:var(--mid);margin-top:8px;}
+
+/* form + map section */
+.form-map{background:#fff;padding:52px 60px;
+  display:grid;grid-template-columns:1fr 1fr;gap:40px;
+  border-bottom:1px solid var(--border);}
+.form-box{}
+.form-box .fb-title{font-family:'Cormorant Garamond',serif;
+  font-size:26px;font-weight:700;color:var(--navy);margin-bottom:6px;}
+.form-box .fb-sub{font-size:13px;color:var(--mid);margin-bottom:24px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+.form-field{border:1.5px solid var(--border);border-radius:7px;
+  padding:12px 16px;font-size:13.5px;color:var(--mid);
+  background:var(--cream);width:100%;
+  font-family:'Outfit',sans-serif;}
+.form-field.full{grid-column:1/-1;}
+.form-select{border:1.5px solid var(--border);border-radius:7px;
+  padding:12px 16px;font-size:13.5px;color:var(--mid);
+  background:var(--cream);width:100%;margin-bottom:14px;
+  font-family:'Outfit',sans-serif;}
+.form-textarea{border:1.5px solid var(--border);border-radius:7px;
+  padding:12px 16px;font-size:13.5px;color:var(--mid);
+  background:var(--cream);width:100%;height:100px;
+  font-family:'Outfit',sans-serif;resize:none;margin-bottom:16px;}
+.form-submit{background:var(--gold);color:var(--navy);
+  font-size:14px;font-weight:700;padding:14px;
+  border-radius:7px;width:100%;text-align:center;
+  cursor:pointer;margin-bottom:14px;}
+.form-reassure{display:flex;flex-direction:column;gap:7px;}
+.fr-item{display:flex;align-items:center;gap:8px;
+  font-size:12px;color:var(--mid);}
+.fr-item::before{content:'✓';color:var(--gold);font-weight:700;flex-shrink:0;}
+
+/* map side */
+.map-side{}
+.map-placeholder{background:var(--cream);border:1px solid var(--border);
+  border-radius:10px;height:220px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:8px;margin-bottom:20px;}
+.map-placeholder .mp-icon{font-size:32px;}
+.map-placeholder .mp-text{font-size:12.5px;color:var(--mid);text-align:center;}
+.map-placeholder .mp-name{font-size:14px;font-weight:700;color:var(--navy);}
+.map-btn{background:var(--navy);color:#fff;font-size:13px;font-weight:600;
+  padding:10px 18px;border-radius:6px;text-align:center;
+  cursor:pointer;margin-bottom:20px;width:100%;}
+.office-details{border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+.od-header{background:var(--navy);padding:14px 18px;
+  font-size:12px;font-weight:700;color:var(--gold);
+  text-transform:uppercase;letter-spacing:.08em;}
+.od-row{display:flex;align-items:flex-start;gap:12px;
+  padding:12px 18px;border-bottom:1px solid var(--border);
+  font-size:13px;color:var(--text);}
+.od-row:last-child{border-bottom:none;}
+.od-icon{flex-shrink:0;width:20px;text-align:center;color:var(--gold);}
+.od-label{font-weight:600;color:var(--navy);margin-bottom:1px;}
+.od-value{color:var(--mid);font-size:12.5px;}
+
+/* hours banner */
+.hours-banner{background:var(--pale);border:1px solid rgba(196,154,42,.3);
+  padding:20px 60px;display:flex;align-items:center;
+  gap:24px;border-top:1px solid var(--border);}
+.hb-icon{font-size:24px;}
+.hb-text{font-size:14px;color:var(--text);}
+.hb-text strong{color:var(--navy);}
+.hb-note{margin-left:auto;font-size:12px;color:var(--mid);
+  font-style:italic;}
+
+/* cta */
+.contact-cta{background:var(--navy);padding:44px 60px;
+  display:grid;grid-template-columns:1fr auto;gap:36px;align-items:center;}
+.cc-h2{font-family:'Cormorant Garamond',serif;font-size:28px;
+  font-weight:700;color:#fff;margin-bottom:7px;}
+.cc-sub{font-size:14px;color:rgba(255,255,255,.6);}
+.cc-btns{display:flex;gap:12px;flex-shrink:0;}
+</style>
+</head><body>
+
+<div class="fwa"><div class="fwa-ring"></div>💬</div>
+<div class="page-wrap">
+
+<div class="topbar">
+  <div class="tb-l">
+    <span>✉ trademarks@vsarora.com</span>
+    <span>📍 43/C Sri Gopal Mullick Lane, Kolkata</span>
+    <span>🕐 Mon–Sat: 10am–7pm IST</span>
+  </div>
+  <div class="tb-r">
+    <div class="wa-pill">💬 WhatsApp Us</div>
+    <div class="call-pill">📞 +91 (033) 6291807816</div>
+  </div>
+</div>
+<nav class="nav">
+  <div>
+    <div class="logo-name">V.S. Arora &amp; Co.</div>
+    <div class="logo-tag">Advocates · IP Attorneys · Solicitors</div>
+  </div>
+  <div class="nav-links">
+    <div class="nav-link">Home</div>
+    <div class="nav-link ">About Us</div>
+    <div class="nav-link">Practice Areas ▾</div>
+    <div class="nav-link">Testimonials</div>
+    <div class="nav-link">Resources</div>
+    <div class="nav-link">Contact Us</div>
+    <div class="nav-cta">Free Consultation</div>
+  </div>
+</nav>
+<div class="bc ann-wrap">
+  <div class="ann blue">Breadcrumb</div>
+  Home <span class="bc-sep">›</span> <span class="bc-cur">Contact Us</span>
+</div>
+
+<!-- HERO -->
+<section class="c-hero ann-wrap">
+  <div class="ann red">REWRITE: Conversational, friction-removing hero</div>
+  <div class="ch-eyebrow">
+    <div class="ch-line"></div>
+    <div class="ch-ey">Get in Touch</div>
+    <div class="ch-line"></div>
+  </div>
+  <h1 class="ch-h1">Let's protect your brand.<br><em>It starts with a free call.</em></h1>
+  <p class="ch-sub">No legal jargon. No obligation. Just a clear, confidential conversation about your IP needs — and whether or not we can help.</p>
+</section>
+
+<!-- 3-METHOD CARDS -->
+<section class="method-section ann-wrap">
+  <div class="ann gold">NEW: 3 contact methods — give visitors a choice</div>
+  <div class="sec-label"><div class="sl-line"></div><div class="sl-text">How to reach us</div></div>
+  <div class="method-grid">
+
+    <div class="method-card wa-card">
+      <div class="mc-icon">💬</div>
+      <div class="mc-title">WhatsApp</div>
+      <div class="mc-value">+91 (033) 6291807816</div>
+      <div class="mc-desc">Most clients prefer this. Message us directly — we'll reply within the hour during office hours.</div>
+      <div class="mc-btn green">Open WhatsApp →</div>
+      <div class="mc-response">⚡ Usually replies within 1 hour</div>
+    </div>
+
+    <div class="method-card">
+      <div class="mc-icon">📞</div>
+      <div class="mc-title">Call Us</div>
+      <div class="mc-value">+91 (033) 6291807816</div>
+      <div class="mc-desc">Prefer to speak directly? Call us during office hours and we'll walk you through your options.</div>
+      <div class="mc-btn dark">Call Now →</div>
+      <div class="mc-response">🕐 Mon–Sat, 10am–7pm IST</div>
+    </div>
+
+    <div class="method-card">
+      <div class="mc-icon">🗓️</div>
+      <div class="mc-title">Book a Slot</div>
+      <div class="mc-value">Free 20-minute call</div>
+      <div class="mc-desc">Pick a date and time that works for you. We'll send a confirmation and be ready when you call.</div>
+      <div class="mc-btn gold">Book a Time Slot →</div>
+      <div class="mc-response">📬 Confirmation within 24 hours</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FORM + MAP -->
+<section class="form-map ann-wrap">
+  <div class="ann blue">UPDATE: Improved form with service dropdown</div>
+
+  <div class="form-box">
+    <div class="fb-title">Send us a message</div>
+    <div class="fb-sub">Fill this in and we'll get back to you within 24 hours — usually much sooner.</div>
+    <div class="form-row">
+      <input class="form-field" placeholder="Your Full Name" readonly>
+      <input class="form-field" placeholder="Phone / WhatsApp" readonly>
+    </div>
+    <input class="form-field full" placeholder="Email Address" style="margin-bottom:14px;" readonly>
+    <select class="form-select" disabled>
+      <option>What do you need help with? ▾</option>
+      <option>Trademark Registration</option>
+      <option>Patent Filing</option>
+      <option>Copyright Registration</option>
+      <option>Company Formation / MSME</option>
+      <option>IP Litigation</option>
+      <option>Design Registration</option>
+      <option>Other / Not Sure</option>
+    </select>
+    <textarea class="form-textarea" placeholder="Brief description of your matter (optional)…" readonly></textarea>
+    <div class="form-submit">Send My Enquiry →</div>
+    <div class="form-reassure">
+      <div class="fr-item">Free first consultation — no hidden charges</div>
+      <div class="fr-item">100% confidential — your details will never be shared</div>
+      <div class="fr-item">We respond to all enquiries within 24 hours</div>
+    </div>
+  </div>
+
+  <div class="map-side ann-wrap">
+    <div class="ann green">Keep the map — fix address &amp; verify Google Business</div>
+    <div class="map-placeholder">
+      <div class="mp-icon">🗺️</div>
+      <div class="mp-name">V.S. Arora &amp; Co.</div>
+      <div class="mp-text">43/C Sri Gopal Mullick Lane<br>Kolkata 700012, West Bengal</div>
+      <div style="font-size:11px;color:#94A3B8;margin-top:4px;">↑ Embed Google Maps here</div>
+    </div>
+    <div class="map-btn">📍 Get Directions on Google Maps</div>
+    <div class="office-details">
+      <div class="od-header">Office Information</div>
+      <div class="od-row">
+        <div class="od-icon">📍</div>
+        <div>
+          <div class="od-label">Address</div>
+          <div class="od-value">43/C Sri Gopal Mullick Lane, Kolkata 700012, West Bengal, India</div>
+        </div>
+      </div>
+      <div class="od-row">
+        <div class="od-icon">📞</div>
+        <div>
+          <div class="od-label">Phone</div>
+          <div class="od-value">+91 (033) 6291807816</div>
+        </div>
+      </div>
+      <div class="od-row">
+        <div class="od-icon">📧</div>
+        <div>
+          <div class="od-label">Email</div>
+          <div class="od-value">trademarks@vsarora.com</div>
+        </div>
+      </div>
+      <div class="od-row">
+        <div class="od-icon">🕐</div>
+        <div>
+          <div class="od-label">Office Hours</div>
+          <div class="od-value">Monday – Saturday: 10:00 AM – 7:00 PM IST<br>Sunday: Closed</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOURS NOTE -->
+<div class="hours-banner ann-wrap">
+  <div class="ann gold">FIX: Remove "24/7" claim — be honest about hours</div>
+  <div class="hb-icon">ℹ️</div>
+  <div class="hb-text">
+    <strong>Response times:</strong> We respond to all WhatsApp messages and emails within <strong>2 hours</strong> during office hours (Mon–Sat, 10am–7pm IST). 
+    Messages sent outside hours are answered first thing the next working day.
+  </div>
+  <div class="hb-note">"24/7" was the old template — this honest message builds more trust</div>
+</div>
+
+<!-- CTA -->
+<section class="contact-cta ann-wrap">
+  <div class="ann red">CTA — End with a warm, pressure-free close</div>
+  <div>
+    <div class="cc-h2">Not sure what you need yet?</div>
+    <p class="cc-sub">That's completely fine — it's the most common starting point. WhatsApp us or book a call and we'll figure it out together, for free.</p>
+  </div>
+  <div class="cc-btns">
+    <div class="btn-gold">📅 Book Free Call</div>
+    <div class="btn-wa">💬 WhatsApp Now</div>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div>
+      <div class="fb-name">V.S. Arora &amp; Co.</div>
+      <div class="fb-tag">Advocates · IP Attorneys · Solicitors</div>
+      <p class="fb-p">A full-service intellectual property and corporate law firm based in Kolkata, serving businesses across India and the SAARC region since 2020.</p>
+      <div class="fb-contact">📍 43/C Sri Gopal Mullick Lane, Kolkata 700012<br>
+        📧 trademarks@vsarora.com<br>
+        📞 +91 (033) 6291807816<br>
+        🕐 Mon–Sat: 10am – 7pm IST</div>
+    </div>
+    <div><div class="fc-h">Practice Areas</div>
+      <ul class="fc-ul"><li>Trademarks</li><li>Patents</li><li>Copyright</li>
+      <li>Designs</li><li>Geographical Indications</li><li>Litigation</li><li>Business Law</li></ul>
+    </div>
+    <div><div class="fc-h">Company</div>
+      <ul class="fc-ul"><li>About Us</li><li>Testimonials</li>
+      <li>Resources &amp; Insights</li><li>FAQ</li><li>Contact Us</li></ul>
+    </div>
+    <div><div class="fc-h">Reach Us</div>
+      <ul class="fc-ul"><li>📞 Call Us</li><li>💬 WhatsApp</li>
+      <li>📧 Email</li><li>🗓️ Book a Slot</li><li>🔗 LinkedIn</li></ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 V.S. Arora &amp; Co. All rights reserved. | Bar Council of India Disclaimer applies.</p>
+  </div>
+</footer>
+</div>
+
+
+<div class="ann-legend">
+  <div class="al-title">📋 Designer Notes — Contact Us Page</div>
+  <div class="al-sub">Short, direct, and friction-free. 5 sections max. Every element is designed to lower the hesitation to reach out.</div>
+  <div class="al-grid">
+    <div class="al-note r"><div class="al-lbl">🔴 Hero Rewrite</div>
+    <div class="al-txt">Remove "Call us 24/7" framing. Replace with: "Let's protect your brand. It starts with a free call." Plus the reassuring sub: "No legal jargon. No obligation." This directly removes the #1 reason people don't contact law firms online.</div></div>
+    <div class="al-note g"><div class="al-lbl">🟡 3 Contact Methods</div>
+    <div class="al-txt">WhatsApp (green card, always first — this is how most Indian SME clients prefer contact), Call (dark card), Book a Slot (gold card). Each shows a response time. Giving choices reduces abandonment — if they won't call, they'll WhatsApp.</div></div>
+    <div class="al-note b"><div class="al-lbl">🔵 Form Improvements</div>
+    <div class="al-txt">Add service dropdown (Trademark / Patent / Copyright / Company Law / Litigation / Other). This pre-qualifies the lead so VS Arora knows what they're dealing with before the call. Textarea is optional — reduces form friction.</div></div>
+    <div class="al-note gr"><div class="al-lbl">🟢 Map + Office Details</div>
+    <div class="al-txt">Keep the Google Maps embed — it signals physical presence. Add a clean "Office Information" card with address, phone, email, hours. Verify the Google Business listing matches this address before launch.</div></div>
+    <div class="al-note r"><div class="al-lbl">🔴 Fix: Wrong Phone</div>
+    <div class="al-txt">The current page shows "869-5414-5" — a template placeholder that was never removed. Replace with +91 (033) 6291807816 everywhere on the page. This is causing lost leads every single day until fixed.</div></div>
+    <div class="al-note g"><div class="al-lbl">🟡 Fix: Remove "24/7"</div>
+    <div class="al-txt">Replace the false "24/7" claim with an honest response time statement: "We respond within 2 hours during office hours." Honest promises build more trust than inflated ones — especially for a boutique firm where clients want a real person, not a bot.</div></div>
+  </div>
+</div>
+</body></html>
