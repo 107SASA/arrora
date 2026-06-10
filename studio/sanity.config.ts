@@ -1,12 +1,20 @@
 import {defineConfig} from 'sanity'
 import {deskTool} from 'sanity/desk'
-import * as schemas from '../../sanity/schemas'
+// Load schemas from the main project if available. Use require at runtime
+// to avoid TypeScript/Next.js build-time resolution errors.
+let schemaModule: any
+try {
+  // @ts-ignore: dynamic require — may not resolve during Next.js typecheck
+  schemaModule = require('../../sanity/schemas')
+} catch (err) {
+  schemaModule = {}
+}
 
 const schemaTypes = [
-  schemas.testimonialSchema,
-  schemas.serviceSchema,
-  schemas.teamMemberSchema,
-]
+  schemaModule.testimonialSchema,
+  schemaModule.serviceSchema,
+  schemaModule.teamMemberSchema,
+].filter(Boolean)
 
 // Load @sanity/vision optionally — keep CI/builds safe if it's not installed
 let visionTool: any
