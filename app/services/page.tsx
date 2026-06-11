@@ -1,6 +1,18 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { LightbulbIcon, GavelIcon, BuildingIcon, PenToolIcon, WhatsAppIcon } from '@/components/ui/Icons'
+import { getPage, getSection } from '@/lib/cms'
+
+export const revalidate = 3600
+
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await getPage('services')
+  return {
+    title: page?.meta?.title ?? 'Practice Areas | V.S. Arora & Co.',
+    description: page?.meta?.description ?? 'Trademark registration, patent filing, copyright, IP litigation, business law and design protection — comprehensive IP services by VS Arora & Co., Kolkata.',
+    openGraph: page?.meta?.og_image ? { images: [page.meta.og_image] } : undefined,
+  }
+}
 
 function ServiceIcon({ slug }: { slug: string }) {
   const props = { size: 26, color: '#C49A2A' }
@@ -13,11 +25,6 @@ function ServiceIcon({ slug }: { slug: string }) {
   return null
 }
 
-export const metadata: Metadata = {
-  title: 'Practice Areas | V.S. Arora & Co.',
-  description: 'Trademark registration, patent filing, copyright, IP litigation, business law and design protection — comprehensive IP services by VS Arora & Co., Kolkata.',
-}
-
 const staticServices = [
   { title: 'Trade Marks', slug: 'trademarks', pain: 'Someone may already be using your brand name.', description: 'We register and defend your trademark across India and internationally. Our trademark services cover availability searches, application filing, examination response, opposition and appeal proceedings.', features: ['Trademark Search & Clearance', 'Application Filing (Classes 1–45)', 'Examination Response', 'Opposition Proceedings', 'International Filing (Madrid Protocol)', 'Trademark Renewal'] },
   { title: 'Patents', slug: 'patents', pain: 'A competitor could file your invention before you do.', description: 'Protect your invention before a competitor files it. We handle patent applications, prosecution, opposition and enforcement for inventors and businesses across all industries.', features: ['Patent Drafting & Filing', 'Prior Art Search', 'Examination Response', 'PCT International Filing', 'Patent Opposition', 'Licensing & Assignment'] },
@@ -27,8 +34,17 @@ const staticServices = [
   { title: 'Designs & GI', slug: 'designs-gi', pain: "Your product's distinctive look deserves protection.", description: "Your product's look and geographical origin are just as protectable as its name. We handle industrial design registration and Geographical Indication applications.", features: ['Industrial Design Registration', 'Design Infringement', 'GI Application Filing', 'GI Tag Protection', 'Product Design Audit', 'International Design'] },
 ]
 
-export default function ServicesPage() {
-  const items = staticServices
+export default async function ServicesPage() {
+  const page = await getPage('services')
+  const servicesSection = getSection(page, 'services')
+
+  let items = staticServices
+  if (servicesSection.services_json) {
+    try {
+      const parsed = JSON.parse(servicesSection.services_json)
+      if (Array.isArray(parsed) && parsed.length > 0) items = parsed
+    } catch { /* keep static fallback */ }
+  }
 
   return (
     <>

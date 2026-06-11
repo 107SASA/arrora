@@ -30,10 +30,24 @@ export type CmsPage = {
   id: string;
   title: string;
   slug: string;
-  meta_title: string | null;
-  meta_description: string | null;
-  status: "draft" | "published";
+  meta: {
+    title: string | null;
+    description: string | null;
+    og_image: string | null;
+  };
+  sections: Array<{
+    type: string;
+    label: string;
+    order: number;
+    fields: Record<string, string | null>;
+  }>;
 };
+
+// Helper: get a section's fields by type, with an empty-object fallback so callers
+// can safely do section.field ?? 'default' without null checks.
+export function getSection(page: CmsPage | null, type: string): Record<string, string | null> {
+  return page?.sections?.find(s => s.type === type)?.fields ?? {}
+}
 
 // The CMS list endpoints return { data: T[], meta: {...} } — unwrap .data here.
 
@@ -53,6 +67,7 @@ export async function getPages(): Promise<CmsPage[] | null> {
   return res?.data ?? null;
 }
 
-export function getPage(slug: string) {
-  return cmsFetch<CmsPage>(`/pages/${slug}`);
+export async function getPage(slug: string): Promise<CmsPage | null> {
+  const res = await cmsFetch<{ data: CmsPage }>(`/pages/${slug}`);
+  return res?.data ?? null;
 }

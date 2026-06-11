@@ -1,13 +1,24 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { MapPinIcon, PhoneIcon, MailIcon, WhatsAppIcon } from '@/components/ui/Icons'
+import { getPage, getSection } from '@/lib/cms'
 
-export const metadata: Metadata = {
-  title: 'Contact Us | V.S. Arora & Co.',
-  description: 'Contact VS Arora & Co. for a free IP consultation. Located in Kolkata. Phone, WhatsApp, email and in-person appointments available.',
+export const revalidate = 3600
+
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await getPage('contact')
+  return {
+    title: page?.meta?.title ?? 'Contact Us | V.S. Arora & Co.',
+    description: page?.meta?.description ?? 'Contact VS Arora & Co. for a free IP consultation. Located in Kolkata. Phone, WhatsApp, email and in-person appointments available.',
+    openGraph: page?.meta?.og_image ? { images: [page.meta.og_image] } : undefined,
+  }
 }
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const page = await getPage('contact')
+  const hero    = getSection(page, 'hero')
+  const contact = getSection(page, 'contact')
+
   return (
     <>
       {/* Breadcrumb */}
@@ -23,13 +34,15 @@ export default function ContactPage() {
         <div style={{ maxWidth: '1280px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
             <div style={{ width: '28px', height: '2px', background: '#C49A2A', flexShrink: 0 }} />
-            <span style={{ fontSize: '11px', fontWeight: 600, color: '#C49A2A', textTransform: 'uppercase', letterSpacing: '0.14em' }}>Get In Touch</span>
+            <span style={{ fontSize: '11px', fontWeight: 600, color: '#C49A2A', textTransform: 'uppercase', letterSpacing: '0.14em' }}>
+              {hero.eyebrow ?? 'Get In Touch'}
+            </span>
           </div>
           <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(32px, 5vw, 56px)', fontWeight: 700, color: 'white', marginBottom: '16px' }}>
-            Contact Us
+            {hero.headline ?? 'Contact Us'}
           </h1>
           <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.65)', maxWidth: '560px', lineHeight: 1.7 }}>
-            Book your free consultation — no obligation, no legal jargon. We will explain exactly what protection your business needs.
+            {hero.subheadline ?? 'Book your free consultation — no obligation, no legal jargon. We will explain exactly what protection your business needs.'}
           </p>
         </div>
       </section>
@@ -49,9 +62,9 @@ export default function ContactPage() {
             {/* Contact info */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               {[
-                { icon: <MapPinIcon size={20} color="#C49A2A" />, title: 'Visit Us', lines: ['43/C Sri Gopal Mullick Lane', 'Kolkata – 700012, West Bengal', 'India'] },
-                { icon: <PhoneIcon size={20} color="#C49A2A" />, title: 'Call Us', lines: ['+91 9123650220', 'Mon–Sat: 10am–7pm IST'] },
-                { icon: <MailIcon size={20} color="#C49A2A" />, title: 'Email Us', lines: ['trademarks@vsarora.com', 'We reply within 24 hours'] },
+                { icon: <MapPinIcon size={20} color="#C49A2A" />, title: 'Visit Us', lines: contact.address ? [contact.address] : ['43/C Sri Gopal Mullick Lane', 'Kolkata – 700012, West Bengal', 'India'] },
+                { icon: <PhoneIcon size={20} color="#C49A2A" />, title: 'Call Us', lines: [contact.phone ?? '+91 9123650220', 'Mon–Sat: 10am–7pm IST'] },
+                { icon: <MailIcon size={20} color="#C49A2A" />, title: 'Email Us', lines: [contact.email ?? 'trademarks@vsarora.com', 'We reply within 24 hours'] },
                 { icon: <WhatsAppIcon size={20} color="#C49A2A" />, title: 'WhatsApp', lines: ['+91 9123650220', 'Fastest way to reach us'] },
               ].map(item => (
                 <div key={item.title} style={{ display: 'flex', gap: '16px', padding: '20px', background: 'white', borderRadius: '10px', border: '1px solid #EDE9E0' }}>

@@ -1,9 +1,16 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { getPage, getSection } from '@/lib/cms'
 
-export const metadata: Metadata = {
-  title: 'Client Testimonials | V.S. Arora & Co.',
-  description: 'Read what clients say about VS Arora & Co. — real stories from businesses we have helped protect their brands, trademarks and IP across India.',
+export const revalidate = 3600
+
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await getPage('testimonials')
+  return {
+    title: page?.meta?.title ?? 'Client Testimonials | V.S. Arora & Co.',
+    description: page?.meta?.description ?? 'Read what clients say about VS Arora & Co. — real stories from businesses we have helped protect their brands, trademarks and IP across India.',
+    openGraph: page?.meta?.og_image ? { images: [page.meta.og_image] } : undefined,
+  }
 }
 
 const staticTestimonials = [
@@ -15,8 +22,19 @@ const staticTestimonials = [
   { name: 'Amit Bose', business: 'Manufacturing Co.', location: 'Kolkata', service: 'Patent', quote: "We had a unique industrial design we needed to protect quickly. The team filed our design application promptly and got us the protection we needed before our product launch.", initial: 'A', rating: 5 },
 ]
 
-export default function TestimonialsPage() {
-  const items = staticTestimonials
+export default async function TestimonialsPage() {
+  const page            = await getPage('testimonials')
+  const hero            = getSection(page, 'hero')
+  const cta             = getSection(page, 'cta')
+  const testimonialsSection = getSection(page, 'testimonials')
+
+  let testimonials = staticTestimonials
+  if (testimonialsSection.testimonials_json) {
+    try {
+      const parsed = JSON.parse(testimonialsSection.testimonials_json)
+      if (Array.isArray(parsed) && parsed.length > 0) testimonials = parsed
+    } catch { /* keep static fallback */ }
+  }
 
   return (
     <>
@@ -33,13 +51,15 @@ export default function TestimonialsPage() {
         <div style={{ maxWidth: '1280px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
             <div style={{ width: '28px', height: '2px', background: '#C49A2A', flexShrink: 0 }} />
-            <span style={{ fontSize: '11px', fontWeight: 600, color: '#C49A2A', textTransform: 'uppercase', letterSpacing: '0.14em' }}>Client Stories</span>
+            <span style={{ fontSize: '11px', fontWeight: 600, color: '#C49A2A', textTransform: 'uppercase', letterSpacing: '0.14em' }}>
+              {hero.eyebrow ?? 'Client Stories'}
+            </span>
           </div>
           <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(32px, 5vw, 56px)', fontWeight: 700, color: 'white', marginBottom: '16px' }}>
-            What Our Clients Say
+            {hero.headline ?? 'What Our Clients Say'}
           </h1>
           <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.65)', maxWidth: '560px', lineHeight: 1.7 }}>
-            Real stories from businesses we have helped protect what they have built.
+            {hero.subheadline ?? 'Real stories from businesses we have helped protect what they have built.'}
           </p>
         </div>
       </section>
@@ -48,7 +68,7 @@ export default function TestimonialsPage() {
       <section className="rsp-sec" style={{ background: '#FAF7F2' }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
           <div className="rsp-testi-page-grid" style={{ marginBottom: '48px' }}>
-            {items.map((t: typeof staticTestimonials[0], i: number) => (
+            {testimonials.map((t, i) => (
               <div key={i} style={{ background: 'white', borderRadius: '10px', padding: '28px', border: '1px solid #EDE9E0', boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
                 <div style={{ color: '#C49A2A', fontSize: '16px', marginBottom: '16px' }}>{'★'.repeat(t.rating || 5)}</div>
                 <p style={{ fontSize: '14px', color: '#1A2533', lineHeight: 1.7, marginBottom: '24px', fontStyle: 'italic' }}>
@@ -73,11 +93,13 @@ export default function TestimonialsPage() {
           {/* CTA */}
           <div style={{ background: '#0B1829', borderRadius: '12px', padding: '48px 32px', textAlign: 'center' }}>
             <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(24px, 4vw, 36px)', fontWeight: 700, color: 'white', marginBottom: '12px' }}>
-              Ready to Be Our Next Success Story?
+              {cta.headline ?? 'Ready to Be Our Next Success Story?'}
             </h2>
-            <p style={{ color: 'rgba(255,255,255,0.65)', marginBottom: '28px' }}>Free first consultation — no obligation, no jargon.</p>
+            <p style={{ color: 'rgba(255,255,255,0.65)', marginBottom: '28px' }}>
+              {cta.description ?? 'Free first consultation — no obligation, no jargon.'}
+            </p>
             <Link href="/contact" style={{ background: '#C49A2A', color: '#0B1829', fontWeight: 700, padding: '14px 32px', borderRadius: '7px', textDecoration: 'none', fontSize: '14px', display: 'inline-block' }}>
-              Book Free Consultation →
+              {cta.button_text ?? 'Book Free Consultation →'}
             </Link>
           </div>
         </div>

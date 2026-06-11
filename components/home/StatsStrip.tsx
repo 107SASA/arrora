@@ -1,11 +1,22 @@
-const stats = [
-  { num: '500+', label: 'Trademarks Filed' },
-  { num: '15+', label: 'Years Experience' },
-  { num: '8+', label: 'Countries Covered' },
-  { num: '100%', label: 'Free First Consult' },
-]
+interface StatsCms {
+  s1_num?: string | null
+  s1_label?: string | null
+  s2_num?: string | null
+  s2_label?: string | null
+  s3_num?: string | null
+  s3_label?: string | null
+  s4_num?: string | null
+  s4_label?: string | null
+}
 
-export default function StatsStrip() {
+export default function StatsStrip({ cmStats }: { cmStats?: StatsCms }) {
+  const stats = [
+    { num: cmStats?.s1_num ?? '500+', label: cmStats?.s1_label ?? 'Trademarks Filed' },
+    { num: cmStats?.s2_num ?? '15+',  label: cmStats?.s2_label ?? 'Years Experience' },
+    { num: cmStats?.s3_num ?? '8+',   label: cmStats?.s3_label ?? 'Countries Covered' },
+    { num: cmStats?.s4_num ?? '100%', label: cmStats?.s4_label ?? 'Free First Consult' },
+  ]
+
   return (
     <div className="rsp-stats" style={{ background: '#C49A2A' }}>
       {stats.map((s, i) => (

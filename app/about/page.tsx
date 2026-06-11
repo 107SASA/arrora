@@ -1,18 +1,43 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
+import { getPage, getSection } from '@/lib/cms'
 
-export const metadata: Metadata = {
-  title: 'About Us | V.S. Arora & Co.',
-  description: "Meet Adv. Shalini Arora and Adv. Vimesh Arora — the founding team behind VS Arora & Co., Kolkata's IP law specialists with 15+ years of experience.",
+export const revalidate = 3600
+
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await getPage('about')
+  return {
+    title: page?.meta?.title ?? 'About Us | V.S. Arora & Co.',
+    description: page?.meta?.description ?? "Meet Adv. Shalini Arora and Adv. Vimesh Arora — the founding team behind VS Arora & Co., Kolkata's IP law specialists with 15+ years of experience.",
+    openGraph: page?.meta?.og_image ? { images: [page.meta.og_image] } : undefined,
+  }
 }
 
-const team = [
+interface TeamMember {
+  photo: string
+  badge: string
+  name: string
+  title: string
+  quote: string
+  tags: string[]
+}
+
+function safeParseArray<T>(json: string | null | undefined): T[] | null {
+  try {
+    const parsed = JSON.parse(json || '')
+    return Array.isArray(parsed) ? parsed : null
+  } catch {
+    return null
+  }
+}
+
+const DEFAULT_TEAM: TeamMember[] = [
   {
     photo: '/shalini-arora.png',
     badge: 'Founder & Director',
     name: 'Adv. Shalini Arora',
-    titleLine: 'B.A.LL.B · Intellectual Property Law Specialist',
+    title: 'B.A.LL.B · Intellectual Property Law Specialist',
     quote: 'Every small business deserves the same IP protection that large corporates get. We built VS Arora & Co. to make that possible.',
     tags: ['Trademarks', 'Patents', 'Copyright', '15+ Yrs Exp'],
   },
@@ -20,13 +45,41 @@ const team = [
     photo: '/vimesh-arora.jpg',
     badge: 'Co-Founder & Managing Partner',
     name: 'Adv. Vimesh Arora',
-    titleLine: 'LL.B · Corporate & Litigation Specialist',
+    title: 'LL.B · Corporate & Litigation Specialist',
     quote: "In India's fast-growing economy, your brand is your most valuable asset. Protecting it from day one is not optional — it is essential.",
     tags: ['Litigation', 'Business Law', 'Corporate Law', 'High Court'],
   },
 ]
 
-export default function AboutPage() {
+const DEFAULT_CREDENTIALS = [
+  'Bar Council of India',
+  'PAN India Filing Network',
+  'Madrid Protocol Registered',
+  'SAARC Regional Network',
+  'IPAB Registered Practitioners',
+  'High Court Appearances',
+]
+
+export default async function AboutPage() {
+  const page = await getPage('about')
+
+  const hero        = getSection(page, 'hero')
+  const mission     = getSection(page, 'about')      // about section = mission content
+  const statsFields = getSection(page, 'stats')
+  const teamFields  = getSection(page, 'team')
+  const cta         = getSection(page, 'cta')
+
+  const credentials: string[] = safeParseArray<string>(mission.credentials_json) ?? DEFAULT_CREDENTIALS
+
+  const statItems = [
+    { num: statsFields.s1_num ?? '500+', label: statsFields.s1_label ?? 'Trademarks Filed' },
+    { num: statsFields.s2_num ?? '15+',  label: statsFields.s2_label ?? 'Years Experience' },
+    { num: statsFields.s3_num ?? '8+',   label: statsFields.s3_label ?? 'Countries Covered' },
+    { num: statsFields.s4_num ?? '100%', label: statsFields.s4_label ?? 'Free First Consult' },
+  ]
+
+  const teamMembers: TeamMember[] = safeParseArray<TeamMember>(teamFields.team_json) ?? DEFAULT_TEAM
+
   return (
     <>
       {/* Breadcrumb */}
@@ -42,13 +95,15 @@ export default function AboutPage() {
         <div style={{ maxWidth: '1280px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
             <div style={{ width: '28px', height: '2px', background: '#C49A2A', flexShrink: 0 }} />
-            <span style={{ fontSize: '11px', fontWeight: 600, color: '#C49A2A', textTransform: 'uppercase', letterSpacing: '0.14em' }}>Our Story</span>
+            <span style={{ fontSize: '11px', fontWeight: 600, color: '#C49A2A', textTransform: 'uppercase', letterSpacing: '0.14em' }}>
+              Our Story
+            </span>
           </div>
           <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(32px, 5vw, 56px)', fontWeight: 700, color: 'white', lineHeight: 1.1, maxWidth: '680px', marginBottom: '20px' }}>
-            About V.S. Arora &amp; Co.
+            {hero.headline ?? 'About V.S. Arora & Co.'}
           </h1>
           <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.65)', maxWidth: '560px', lineHeight: 1.75 }}>
-            A full-service intellectual property and corporate law firm based in Kolkata, serving businesses across India and the SAARC region since 2009.
+            {hero.subheadline ?? 'A full-service intellectual property and corporate law firm based in Kolkata, serving businesses across India and the SAARC region since 2009.'}
           </p>
         </div>
       </section>
@@ -63,21 +118,27 @@ export default function AboutPage() {
                 <span style={{ fontSize: '10.5px', fontWeight: 700, color: '#C49A2A', textTransform: 'uppercase', letterSpacing: '0.14em' }}>Our Mission</span>
               </div>
               <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(26px, 4vw, 34px)', fontWeight: 700, color: '#0B1829', lineHeight: 1.2, marginBottom: '16px' }}>
-                IP Protection Should Not Be a Privilege
+                {mission.title ?? 'IP Protection Should Not Be a Privilege'}
               </h2>
-              <p style={{ fontSize: '14.5px', color: '#4B5563', lineHeight: 1.8, marginBottom: '16px' }}>
-                VS Arora &amp; Co. was founded on the belief that every entrepreneur and small business deserves world-class intellectual property protection — not just large corporations with deep pockets.
-              </p>
-              <p style={{ fontSize: '14.5px', color: '#4B5563', lineHeight: 1.8, marginBottom: '32px' }}>
-                Since our founding, we have helped hundreds of businesses across India register and defend their trademarks, patents, and copyrights. We operate with full transparency: no hidden fees, no legal jargon, and no obligation consultations.
-              </p>
+
+              {mission.content ? (
+                <div
+                  dangerouslySetInnerHTML={{ __html: mission.content }}
+                  style={{ fontSize: '14.5px', color: '#4B5563', lineHeight: 1.8, marginBottom: '32px' }}
+                />
+              ) : (
+                <>
+                  <p style={{ fontSize: '14.5px', color: '#4B5563', lineHeight: 1.8, marginBottom: '16px' }}>
+                    VS Arora &amp; Co. was founded on the belief that every entrepreneur and small business deserves world-class intellectual property protection — not just large corporations with deep pockets.
+                  </p>
+                  <p style={{ fontSize: '14.5px', color: '#4B5563', lineHeight: 1.8, marginBottom: '32px' }}>
+                    Since our founding, we have helped hundreds of businesses across India register and defend their trademarks, patents, and copyrights. We operate with full transparency: no hidden fees, no legal jargon, and no obligation consultations.
+                  </p>
+                </>
+              )}
+
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
-                {[
-                  { num: '500+', label: 'Trademarks Filed' },
-                  { num: '15+', label: 'Years Experience' },
-                  { num: '8+', label: 'Countries Covered' },
-                  { num: '100%', label: 'Free First Consult' },
-                ].map(s => (
+                {statItems.map(s => (
                   <div key={s.label} style={{ padding: '18px', background: 'white', borderRadius: '8px', border: '1px solid #EDE9E0', textAlign: 'center' }}>
                     <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '30px', fontWeight: 700, color: '#C49A2A' }}>{s.num}</div>
                     <div style={{ fontSize: '11px', fontWeight: 600, color: '#64748B', letterSpacing: '0.06em', textTransform: 'uppercase', marginTop: '4px' }}>{s.label}</div>
@@ -91,7 +152,7 @@ export default function AboutPage() {
               <div style={{ fontSize: '10.5px', fontWeight: 700, color: '#C49A2A', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '20px' }}>
                 Our Credentials
               </div>
-              {['Bar Council of India', 'PAN India Filing Network', 'Madrid Protocol Registered', 'SAARC Regional Network', 'IPAB Registered Practitioners', 'High Court Appearances'].map(c => (
+              {credentials.map(c => (
                 <div key={c} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '14px 0', borderBottom: '1px solid rgba(196,154,42,0.12)' }}>
                   <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: 'rgba(196,154,42,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', color: '#C49A2A', flexShrink: 0 }}>✓</div>
                   <span style={{ fontSize: '14px', color: 'rgba(255,255,255,0.8)' }}>{c}</span>
@@ -102,7 +163,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Team — horizontal cards */}
+      {/* Team */}
       <section className="rsp-sec" style={{ background: '#0B1829' }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
           <div style={{ marginBottom: '40px' }}>
@@ -111,30 +172,22 @@ export default function AboutPage() {
               <span style={{ fontSize: '10.5px', fontWeight: 700, color: '#C49A2A', textTransform: 'uppercase', letterSpacing: '0.14em' }}>The Team</span>
             </div>
             <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(28px, 4vw, 38px)', fontWeight: 700, color: 'white', lineHeight: 1.2 }}>
-              Meet the People Behind VS Arora &amp; Co.
+              {teamFields.title ?? 'Meet the People Behind VS Arora & Co.'}
             </h2>
           </div>
-
           <div className="rsp-about-team">
-            {team.map(member => (
+            {teamMembers.map(member => (
               <div key={member.name} className="rsp-founder-card" style={{ background: 'white', borderRadius: '12px', overflow: 'hidden', border: '1px solid #EDE9E0', boxShadow: '0 4px 24px rgba(0,0,0,0.06)' }}>
                 <div className="rsp-founder-photo" style={{ position: 'relative', overflow: 'hidden', background: '#132338' }}>
-                  <Image
-                    src={member.photo}
-                    alt={member.name}
-                    fill
-                    style={{ objectFit: 'cover', objectPosition: 'top center' }}
-                  />
+                  <Image src={member.photo} alt={member.name} fill style={{ objectFit: 'cover', objectPosition: 'top center' }} />
                   <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '4px', background: '#C49A2A', zIndex: 1 }} />
                 </div>
                 <div style={{ padding: '28px 24px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                   <div style={{ display: 'inline-block', background: '#F5EDD4', color: '#C49A2A', fontSize: '10px', fontWeight: 700, padding: '4px 10px', borderRadius: '20px', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '10px', alignSelf: 'flex-start' }}>
                     {member.badge}
                   </div>
-                  <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '22px', fontWeight: 700, color: '#0B1829', marginBottom: '4px' }}>
-                    {member.name}
-                  </div>
-                  <div style={{ fontSize: '12px', color: '#64748B', marginBottom: '14px' }}>{member.titleLine}</div>
+                  <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '22px', fontWeight: 700, color: '#0B1829', marginBottom: '4px' }}>{member.name}</div>
+                  <div style={{ fontSize: '12px', color: '#64748B', marginBottom: '14px' }}>{member.title}</div>
                   <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '15px', fontStyle: 'italic', color: '#374151', lineHeight: 1.65, borderLeft: '3px solid #C49A2A', paddingLeft: '14px', marginBottom: '16px' }}>
                     &ldquo;{member.quote}&rdquo;
                   </p>
@@ -159,13 +212,13 @@ export default function AboutPage() {
             <div style={{ width: '24px', height: '2px', background: '#C49A2A', flexShrink: 0 }} />
           </div>
           <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(26px, 4vw, 36px)', fontWeight: 700, color: '#0B1829', marginBottom: '14px' }}>
-            Ready to Protect Your Brand?
+            {cta.headline ?? 'Ready to Protect Your Brand?'}
           </h2>
           <p style={{ fontSize: '15px', color: '#64748B', lineHeight: 1.7, marginBottom: '28px' }}>
-            Book a free consultation — no obligation, no legal jargon.
+            {cta.description ?? 'Book a free consultation — no obligation, no legal jargon.'}
           </p>
           <Link href="/contact" style={{ background: '#C49A2A', color: '#0B1829', fontWeight: 700, padding: '14px 36px', borderRadius: '7px', textDecoration: 'none', fontSize: '14px', display: 'inline-block' }}>
-            Book Free Consultation →
+            {cta.button_text ?? 'Book Free Consultation →'}
           </Link>
         </div>
       </section>

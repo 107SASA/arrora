@@ -1,7 +1,13 @@
 import Link from 'next/link'
 import Image from 'next/image'
 
-export default function Hero() {
+interface HeroCms {
+  headline?: string | null
+  subheadline?: string | null
+  cta_text?: string | null
+}
+
+export default function Hero({ cmsHero }: { cmsHero?: HeroCms }) {
   return (
     <section className="rsp-hero" style={{
       background: '#0B1829',
@@ -39,19 +45,30 @@ export default function Hero() {
           </span>
         </div>
 
-        <h1 style={{
-          fontFamily: "'Cormorant Garamond', serif",
-          fontSize: 'clamp(36px, 5vw, 52px)', fontWeight: 700,
-          color: 'white', lineHeight: 1.12,
-          marginBottom: '20px',
-        }}>
-          Your Brand Is<br />
-          Worth Protecting.<br />
-          <em style={{ color: '#E2B84A', fontStyle: 'italic' }}>We Make Sure It Is.</em>
-        </h1>
+        {cmsHero?.headline ? (
+          <h1 style={{
+            fontFamily: "'Cormorant Garamond', serif",
+            fontSize: 'clamp(36px, 5vw, 52px)', fontWeight: 700,
+            color: 'white', lineHeight: 1.12,
+            marginBottom: '20px',
+          }}>
+            {cmsHero.headline}
+          </h1>
+        ) : (
+          <h1 style={{
+            fontFamily: "'Cormorant Garamond', serif",
+            fontSize: 'clamp(36px, 5vw, 52px)', fontWeight: 700,
+            color: 'white', lineHeight: 1.12,
+            marginBottom: '20px',
+          }}>
+            Your Brand Is<br />
+            Worth Protecting.<br />
+            <em style={{ color: '#E2B84A', fontStyle: 'italic' }}>We Make Sure It Is.</em>
+          </h1>
+        )}
 
         <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.68)', lineHeight: 1.7, maxWidth: '460px', marginBottom: '32px' }}>
-          VS Arora &amp; Co. helps entrepreneurs, startups and businesses across India register and defend their trademarks, patents, and copyrights — before someone else takes what&apos;s rightfully yours.
+          {cmsHero?.subheadline ?? 'VS Arora & Co. helps entrepreneurs, startups and businesses across India register and defend their trademarks, patents, and copyrights — before someone else takes what\'s rightfully yours.'}
         </p>
 
         <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap', marginBottom: '36px' }}>
@@ -62,7 +79,7 @@ export default function Hero() {
             textDecoration: 'none', letterSpacing: '0.02em',
             whiteSpace: 'nowrap',
           }}>
-            Book Free Consultation
+            {cmsHero?.cta_text ?? 'Book Free Consultation'}
           </Link>
           <Link href="/services" style={{
             background: 'transparent', color: 'white',
