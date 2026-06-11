@@ -17,8 +17,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const blog = await getBlog(slug);
   if (!blog) return {};
   return {
-    title: `${blog.title} | V.S. Arora & Co.`,
-    description: blog.excerpt ?? undefined,
+    title: blog.meta?.title ?? `${blog.title} | V.S. Arora & Co.`,
+    description: blog.meta?.description ?? blog.excerpt ?? undefined,
   };
 }
 
@@ -166,6 +166,7 @@ export default async function BlogPostPage({ params }: Props) {
       <section style={{ background: "#FAF7F2", padding: "64px 24px" }}>
         <div style={{ maxWidth: "800px", margin: "0 auto" }}>
           <div
+            className="blog-prose"
             style={{
               background: "white",
               borderRadius: "12px",
@@ -176,7 +177,9 @@ export default async function BlogPostPage({ params }: Props) {
               lineHeight: 1.85,
             }}
           >
-            {blog.excerpt ? (
+            {blog.content ? (
+              <div dangerouslySetInnerHTML={{ __html: blog.content }} />
+            ) : blog.excerpt ? (
               <p>{blog.excerpt}</p>
             ) : (
               <p style={{ color: "#94A3B8" }}>Content coming soon.</p>

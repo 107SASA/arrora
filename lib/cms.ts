@@ -15,6 +15,7 @@ async function cmsFetch<T>(path: string): Promise<T | null> {
   }
 }
 
+// Used in the blog list page
 export type CmsBlog = {
   id: string;
   title: string;
@@ -24,6 +25,22 @@ export type CmsBlog = {
   status: "draft" | "published";
   published_at: string | null;
   created_at: string;
+};
+
+// Used in the single blog post page — includes full content + per-post SEO meta
+export type CmsBlogPost = {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string | null;
+  content: string | null;
+  cover_image: string | null;
+  published_at: string | null;
+  created_at: string;
+  meta: {
+    title: string | null;
+    description: string | null;
+  };
 };
 
 export type CmsPage = {
@@ -57,8 +74,9 @@ export async function getBlogs(): Promise<CmsBlog[] | null> {
   return res?.data ?? null;
 }
 
-export function getBlog(slug: string) {
-  return cmsFetch<CmsBlog>(`/blogs/${slug}`);
+export async function getBlog(slug: string): Promise<CmsBlogPost | null> {
+  const res = await cmsFetch<{ data: CmsBlogPost }>(`/blogs/${slug}`);
+  return res?.data ?? null;
 }
 
 // ── Pages (optional — only used if page content is managed via CMS) ──────────

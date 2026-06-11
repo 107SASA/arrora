@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getBlogs } from "@/lib/cms";
+import { getBlogs, getPage } from "@/lib/cms";
 
-export const revalidate = 3600;
+export const revalidate = 60; // refresh every minute so new articles appear quickly
 
 export const metadata: Metadata = {
   title: "Legal Articles & Updates | V.S. Arora & Co.",
@@ -179,7 +179,7 @@ export default async function BlogListPage() {
                             fontSize: "13.5px",
                             color: "#4B5563",
                             lineHeight: 1.7,
-                            marginBottom: "18px",
+                            marginBottom: "20px",
                             display: "-webkit-box",
                             WebkitLineClamp: 3,
                             WebkitBoxOrient: "vertical",
@@ -191,12 +191,17 @@ export default async function BlogListPage() {
                       )}
                       <span
                         style={{
+                          display: "inline-block",
+                          background: "#0B1829",
+                          color: "white",
                           fontSize: "13px",
                           fontWeight: 600,
-                          color: "#C49A2A",
+                          padding: "10px 20px",
+                          borderRadius: "6px",
+                          letterSpacing: "0.02em",
                         }}
                       >
-                        Read article →
+                        Read More →
                       </span>
                     </div>
                   </article>
