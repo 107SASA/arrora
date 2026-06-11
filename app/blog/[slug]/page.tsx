@@ -1,16 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getBlog, getBlogs } from "@/lib/cms";
+import { getBlog } from "@/lib/cms";
+
+// Pages are generated on first visit and cached for 1 hour (ISR).
+// No build-time API calls needed — avoids failures when env vars aren't set yet.
+export const revalidate = 3600;
+export const dynamicParams = true;
 
 interface Props {
   params: Promise<{ slug: string }>;
-}
-
-export async function generateStaticParams() {
-  const blogs = await getBlogs();
-  if (!blogs) return [];
-  return blogs.map((b) => ({ slug: b.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

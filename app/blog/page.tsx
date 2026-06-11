@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getBlogs } from "@/lib/cms";
 
+export const revalidate = 3600;
+
 export const metadata: Metadata = {
   title: "Legal Articles & Updates | V.S. Arora & Co.",
   description:
