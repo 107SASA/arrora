@@ -35,9 +35,12 @@ export type CmsPage = {
   status: "draft" | "published";
 };
 
+// The CMS list endpoints return { data: T[], meta: {...} } — unwrap .data here.
+
 // ── Blogs (optional — only used if the site has a blog) ──────────────────────
-export function getBlogs() {
-  return cmsFetch<CmsBlog[]>("/blogs");
+export async function getBlogs(): Promise<CmsBlog[] | null> {
+  const res = await cmsFetch<{ data: CmsBlog[] }>("/blogs");
+  return res?.data ?? null;
 }
 
 export function getBlog(slug: string) {
@@ -45,8 +48,9 @@ export function getBlog(slug: string) {
 }
 
 // ── Pages (optional — only used if page content is managed via CMS) ──────────
-export function getPages() {
-  return cmsFetch<CmsPage[]>("/pages");
+export async function getPages(): Promise<CmsPage[] | null> {
+  const res = await cmsFetch<{ data: CmsPage[] }>("/pages");
+  return res?.data ?? null;
 }
 
 export function getPage(slug: string) {
