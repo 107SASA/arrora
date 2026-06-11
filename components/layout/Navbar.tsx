@@ -7,6 +7,7 @@ const navLinks = [
   { label: 'Home', href: '/' },
   { label: 'About Us', href: '/about' },
   { label: 'Practice Areas', href: '/services' },
+  { label: 'Articles', href: '/blog' },
   { label: 'Testimonials', href: '/testimonials' },
   { label: 'Contact Us', href: '/contact' },
 ]
