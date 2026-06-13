@@ -1,6 +1,6 @@
 'use client'
 import Link from 'next/link'
-import { LightbulbIcon, GavelIcon, BuildingIcon, PenToolIcon } from '@/components/ui/Icons'
+import { LightbulbIcon, GavelIcon, BuildingIcon, PenToolIcon, ShieldIcon, GlobeIcon } from '@/components/ui/Icons'
 
 const ScalesBalanceIcon = ({ size = 22, color = '#C49A2A' }: { size?: number; color?: string }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -31,8 +31,10 @@ const services = [
   { icon: <LightbulbIcon size={22} color="#C49A2A" />, title: 'Patents', hook: 'Protect your invention before a competitor files it. We handle patent applications, prosecution and disputes.' },
   { icon: <CSymbolIcon size={22} />, title: 'Copyright', hook: 'Your creative work is your property. We register and enforce copyright for artists, authors and businesses.' },
   { icon: <GavelIcon size={22} color="#C49A2A" />, title: 'IP Litigation', hook: 'When someone steals your IP, we fight back — from district courts to the Supreme Court of India.' },
-  { icon: <BuildingIcon size={22} color="#C49A2A" />, title: 'Business Law', hook: 'Company formation, MSME registration, ISO compliance, franchising and startup law — all under one roof.' },
+  { icon: <BuildingIcon size={22} color="#C49A2A" />, title: 'Corporate & Business Law', hook: 'Company formation, M&A due diligence, franchise agreements, startup law and commercial contracts — all under one roof.' },
   { icon: <PenToolIcon size={22} color="#C49A2A" />, title: 'Designs & GI', hook: "Your product's look and geographical origin are just as protectable as its name. We handle both." },
+  { icon: <ShieldIcon size={22} color="#C49A2A" />, title: 'Anti-counterfeiting', hook: 'Counterfeit products damaging your brand? We coordinate raids, customs recordal and enforcement to shut infringers down.' },
+  { icon: <GlobeIcon size={22} color="#C49A2A" />, title: 'Technology Transfer', hook: 'Turn your IP into income — licensing, technology transfer agreements and royalty structuring across borders.' },
 ]
 
 export default function PracticeAreas() {

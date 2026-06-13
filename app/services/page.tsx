@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { LightbulbIcon, GavelIcon, BuildingIcon, PenToolIcon, WhatsAppIcon } from '@/components/ui/Icons'
+import { LightbulbIcon, GavelIcon, BuildingIcon, PenToolIcon, WhatsAppIcon, ShieldIcon, GlobeIcon } from '@/components/ui/Icons'
 import { getPage, getSection } from '@/lib/cms'
 
 export const revalidate = 3600
@@ -8,8 +8,9 @@ export const revalidate = 3600
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getPage('services')
   return {
-    title: page?.meta?.title ?? 'Practice Areas | V.S. Arora & Co.',
+    title: page?.meta?.title ?? 'Practice Areas',
     description: page?.meta?.description ?? 'Trademark registration, patent filing, copyright, IP litigation, business law and design protection — comprehensive IP services by VS Arora & Co., Kolkata.',
+    alternates: { canonical: '/services' },
     openGraph: page?.meta?.og_image ? { images: [page.meta.og_image] } : undefined,
   }
 }
@@ -22,6 +23,8 @@ function ServiceIcon({ slug }: { slug: string }) {
   if (slug === 'litigation') return <GavelIcon {...props} />
   if (slug === 'business-law') return <BuildingIcon {...props} />
   if (slug === 'designs-gi') return <PenToolIcon {...props} />
+  if (slug === 'anti-counterfeiting') return <ShieldIcon {...props} />
+  if (slug === 'tech-transfer') return <GlobeIcon {...props} />
   return null
 }
 
@@ -30,8 +33,10 @@ const staticServices = [
   { title: 'Patents', slug: 'patents', pain: 'A competitor could file your invention before you do.', description: 'Protect your invention before a competitor files it. We handle patent applications, prosecution, opposition and enforcement for inventors and businesses across all industries.', features: ['Patent Drafting & Filing', 'Prior Art Search', 'Examination Response', 'PCT International Filing', 'Patent Opposition', 'Licensing & Assignment'] },
   { title: 'Copyright', slug: 'copyright', pain: 'Your creative work can be copied without registration.', description: 'Your creative work is your property. We register and enforce copyright for artists, authors, software companies and businesses across India.', features: ['Copyright Registration', 'Infringement Notices', 'DMCA & Online Enforcement', 'Licensing Agreements', 'Software Copyright', 'Content Protection'] },
   { title: 'IP Litigation', slug: 'litigation', pain: 'Infringers are counting on you not fighting back.', description: 'When someone steals your IP, we fight back. From district courts to the Supreme Court of India, our litigation team has the expertise to protect your rights.', features: ['Injunction Applications', 'District & High Court', 'Supreme Court Appearances', 'IP Infringement Cases', 'Passing Off Actions', 'Domain Disputes'] },
-  { title: 'Business Law', slug: 'business-law', pain: 'Contracts and compliance issues can derail your business.', description: 'Company formation, MSME registration, ISO compliance, franchising and startup law — all under one roof. We make the legal side of running a business simple.', features: ['Company Incorporation', 'MSME Registration', 'Startup Legal Pack', 'Franchise Agreements', 'ISO Compliance', 'Contract Drafting'] },
-  { title: 'Designs & GI', slug: 'designs-gi', pain: "Your product's distinctive look deserves protection.", description: "Your product's look and geographical origin are just as protectable as its name. We handle industrial design registration and Geographical Indication applications.", features: ['Industrial Design Registration', 'Design Infringement', 'GI Application Filing', 'GI Tag Protection', 'Product Design Audit', 'International Design'] },
+  { title: 'Corporate & Business Law', slug: 'business-law', pain: 'Legal complexity should never slow your business growth.', description: 'Full-service corporate legal support — from company formation and M&A IP due diligence to joint ventures, franchise structuring and commercial contracts. We act as a single legal partner for the entire business lifecycle.', features: ['Company Incorporation & ROC Compliance', 'M&A IP Due Diligence', 'Joint Venture & Shareholder Agreements', 'MSME & Startup Registration', 'Franchise & Licensing Agreements', 'Commercial Contract Drafting', 'ISO & Regulatory Compliance', 'Corporate Restructuring'] },
+  { title: 'Designs & GI', slug: 'designs-gi', pain: "Your product's distinctive look deserves protection.", description: "Your product's look and geographical origin are just as protectable as its name. We handle industrial design registration and Geographical Indication applications for artisans, cooperatives and businesses across India.", features: ['Industrial Design Registration', 'Design Infringement Actions', 'GI Application Filing', 'GI Tag Enforcement', 'Product Design Audit', 'International Design Filing'] },
+  { title: 'Anti-counterfeiting & Brand Protection', slug: 'anti-counterfeiting', pain: 'Counterfeit products are eroding your brand and your revenue.', description: 'Comprehensive enforcement programmes to detect, seize and prosecute counterfeiters — in the market and at the border. We coordinate police raids, customs IP recordal, civil injunctions and criminal proceedings to shut down infringers fast.', features: ['Market Surveillance & Investigation', 'Customs IP Recordal', 'Police Raid Coordination', 'Civil Injunction & Enforcement', 'Criminal Prosecution', 'Online Brand Protection & Takedowns', 'Border Control Measures', 'Anti-piracy Operations'] },
+  { title: 'Technology Transfer & Licensing', slug: 'tech-transfer', pain: 'Your IP can generate revenue far beyond your core business.', description: 'Monetise your intellectual assets through licensing, technology transfer, joint development agreements and IP valuation. We structure deals that protect your rights while maximising commercial returns — domestically and across borders.', features: ['IP Licensing Agreements', 'Technology Transfer Agreements', 'Royalty Structuring & Negotiation', 'IP Portfolio Valuation', 'Joint Development Agreements', 'Know-how & Trade Secret Protection', 'Cross-border Licensing', 'Franchise IP Structuring'] },
 ]
 
 export default async function ServicesPage() {
@@ -66,13 +71,13 @@ export default async function ServicesPage() {
             <span style={{ fontSize: '11px', fontWeight: 600, color: '#C49A2A', textTransform: 'uppercase', letterSpacing: '0.14em' }}>What We Do</span>
           </div>
           <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(32px, 5vw, 46px)', fontWeight: 700, color: 'white', lineHeight: 1.12, marginBottom: '10px' }}>
-            Our <em style={{ color: '#E2B84A', fontStyle: 'italic' }}>Practice</em> Areas
+            {servicesSection.title ?? <>Our <em style={{ color: '#E2B84A', fontStyle: 'italic' }}>Practice</em> Areas</>}
           </h1>
           <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '20px', fontStyle: 'italic', color: 'rgba(255,255,255,0.6)', marginBottom: '20px', lineHeight: 1.4 }}>
             Comprehensive IP protection — from registration to enforcement.
           </p>
           <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.7)', lineHeight: 1.75, maxWidth: '460px', marginBottom: '30px' }}>
-            Trademarks, patents, copyright, litigation, business law, and design registration — all handled by specialists who speak plain language.
+            {servicesSection.subtitle ?? 'Trademarks, patents, copyright, litigation, business law, and design registration — all handled by specialists who speak plain language.'}
           </p>
           <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
             <Link href="/contact" style={{ background: '#C49A2A', color: '#0B1829', fontSize: '14px', fontWeight: 700, padding: '13px 24px', borderRadius: '7px', textDecoration: 'none' }}>
@@ -86,7 +91,7 @@ export default async function ServicesPage() {
 
         {/* Right — service quick list (hidden on mobile) */}
         <div className="rsp-svc-right" style={{ flexDirection: 'column', justifyContent: 'center', padding: '48px 40px', position: 'relative', zIndex: 2, borderLeft: '1px solid rgba(255,255,255,0.06)' }}>
-          {staticServices.map(s => (
+          {items.map(s => (
             <div key={s.slug} style={{ display: 'flex', alignItems: 'center', gap: '14px', padding: '14px 0', borderBottom: '1px solid rgba(196,154,42,0.1)' }}>
               <div style={{ width: '36px', height: '36px', background: 'rgba(196,154,42,0.1)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                 <ServiceIcon slug={s.slug} />

@@ -7,8 +7,9 @@ export const revalidate = 3600
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getPage('testimonials')
   return {
-    title: page?.meta?.title ?? 'Client Testimonials | V.S. Arora & Co.',
+    title: page?.meta?.title ?? 'Client Testimonials',
     description: page?.meta?.description ?? 'Read what clients say about VS Arora & Co. — real stories from businesses we have helped protect their brands, trademarks and IP across India.',
+    alternates: { canonical: '/testimonials' },
     openGraph: page?.meta?.og_image ? { images: [page.meta.og_image] } : undefined,
   }
 }

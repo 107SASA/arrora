@@ -204,6 +204,24 @@ body { font-family: 'Outfit', sans-serif; background: #F0EDE6; color: var(--text
   .rsp-float-wa   { bottom: 20px !important; right: 16px !important; }
 }
 
+/* ── BLOG LIST LAYOUT ── */
+.rsp-blog-featured  { display: grid; grid-template-columns: 1fr 1fr; }
+.rsp-blog-layout    { display: grid; grid-template-columns: 1fr 300px; gap: 40px; align-items: start; }
+.rsp-blog-sidebar   { display: flex; flex-direction: column; gap: 20px; position: sticky; top: 80px; }
+.rsp-blog-cards     { display: flex; flex-direction: column; gap: 24px; }
+
+@media (max-width: 1024px) {
+  .rsp-blog-layout   { grid-template-columns: 1fr 260px; gap: 28px; }
+}
+@media (max-width: 768px) {
+  .rsp-blog-featured { grid-template-columns: 1fr !important; }
+  .rsp-blog-layout   { grid-template-columns: 1fr !important; }
+  .rsp-blog-sidebar  { display: none !important; }
+}
+@media (max-width: 640px) {
+  .rsp-blog-featured { grid-template-columns: 1fr !important; }
+}
+
 /* ── BLOG ARTICLE PROSE ── */
 .blog-prose h1, .blog-prose h2, .blog-prose h3, .blog-prose h4 {
   font-family: 'Cormorant Garamond', serif;

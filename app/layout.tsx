@@ -6,7 +6,7 @@ import Footer from "@/components/layout/Footer";
 import FloatingWhatsApp from "@/components/ui/FloatingWhatsApp";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://vsarora.com"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://vsarora.vercel.app"),
   title: {
     default: "V.S. Arora & Co. | IP Attorneys & Advocates, Kolkata",
     template: "%s | V.S. Arora & Co.",
@@ -36,7 +36,6 @@ export const metadata: Metadata = {
   authors: [{ name: "V.S. Arora & Co.", url: "https://vsarora.com" }],
   creator: "V.S. Arora & Co.",
   publisher: "V.S. Arora & Co.",
-  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     locale: "en_IN",
@@ -45,21 +44,12 @@ export const metadata: Metadata = {
     title: "V.S. Arora & Co. | IP Attorneys & Advocates, Kolkata",
     description:
       "Kolkata's trusted IP attorneys for trademark, patent, copyright registration and corporate law. Free first consultation. PAN India filing.",
-    images: [
-      {
-        url: "/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "V.S. Arora & Co. — Advocates, Patent & Trademark Attorneys, Kolkata",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "V.S. Arora & Co. | IP Attorneys & Advocates, Kolkata",
     description:
       "Kolkata's trusted IP attorneys for trademark, patent, copyright registration and corporate law. Free first consultation.",
-    images: ["/og-image.jpg"],
   },
   robots: {
     index: true,

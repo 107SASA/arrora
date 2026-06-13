@@ -2,14 +2,16 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { MapPinIcon, PhoneIcon, MailIcon, WhatsAppIcon } from '@/components/ui/Icons'
 import { getPage, getSection } from '@/lib/cms'
+import ContactForm from '@/components/contact/ContactForm'
 
 export const revalidate = 3600
 
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getPage('contact')
   return {
-    title: page?.meta?.title ?? 'Contact Us | V.S. Arora & Co.',
+    title: page?.meta?.title ?? 'Contact Us',
     description: page?.meta?.description ?? 'Contact VS Arora & Co. for a free IP consultation. Located in Kolkata. Phone, WhatsApp, email and in-person appointments available.',
+    alternates: { canonical: '/contact' },
     openGraph: page?.meta?.og_image ? { images: [page.meta.og_image] } : undefined,
   }
 }
@@ -105,48 +107,3 @@ export default async function ContactPage() {
   )
 }
 
-function ContactForm() {
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-      {[
-        { label: 'Your Name', type: 'text', placeholder: 'Eg. Rahul Sharma' },
-        { label: 'Email Address', type: 'email', placeholder: 'rahul@company.com' },
-        { label: 'Phone Number', type: 'tel', placeholder: '+91 98XXX XXXXX' },
-      ].map(field => (
-        <div key={field.label}>
-          <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#1A2533', marginBottom: '6px', letterSpacing: '0.04em' }}>{field.label}</label>
-          <input
-            type={field.type}
-            placeholder={field.placeholder}
-            style={{ width: '100%', padding: '12px 14px', border: '1px solid #EDE9E0', borderRadius: '6px', fontSize: '14px', outline: 'none', fontFamily: "'Outfit', sans-serif", color: '#1A2533', background: 'white' }}
-          />
-        </div>
-      ))}
-      <div>
-        <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#1A2533', marginBottom: '6px', letterSpacing: '0.04em' }}>Service Needed</label>
-        <select style={{ width: '100%', padding: '12px 14px', border: '1px solid #EDE9E0', borderRadius: '6px', fontSize: '14px', fontFamily: "'Outfit', sans-serif", color: '#1A2533', background: 'white' }}>
-          <option>Select a service...</option>
-          <option>Trademark Registration</option>
-          <option>Patent Filing</option>
-          <option>Copyright Registration</option>
-          <option>IP Litigation</option>
-          <option>Business Law</option>
-          <option>Designs & GI</option>
-          <option>Not sure yet</option>
-        </select>
-      </div>
-      <div>
-        <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#1A2533', marginBottom: '6px', letterSpacing: '0.04em' }}>Your Message</label>
-        <textarea
-          placeholder="Tell us about your brand and what you need..."
-          rows={4}
-          style={{ width: '100%', padding: '12px 14px', border: '1px solid #EDE9E0', borderRadius: '6px', fontSize: '14px', fontFamily: "'Outfit', sans-serif", color: '#1A2533', resize: 'vertical', background: 'white' }}
-        />
-      </div>
-      <button style={{ background: '#C49A2A', color: '#0B1829', fontWeight: 700, padding: '14px', borderRadius: '6px', border: 'none', fontSize: '14px', cursor: 'pointer', letterSpacing: '0.02em' }}>
-        Send Message &amp; Book Free Consultation
-      </button>
-      <p style={{ fontSize: '11px', color: '#64748B', textAlign: 'center' }}>We respond within 24 hours. All consultations are free with no obligation.</p>
-    </div>
-  )
-}

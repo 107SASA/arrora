@@ -15,31 +15,13 @@ import CTABanner from '@/components/home/CTABanner'
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getPage('home')
   return {
-    title: page?.meta?.title ?? 'V.S. Arora & Co. | IP Attorneys & Advocates, Kolkata',
+    title: page?.meta?.title
+      ? { absolute: page.meta.title }
+      : { absolute: 'V.S. Arora & Co. | IP Attorneys & Advocates, Kolkata' },
     description: page?.meta?.description ?? "Kolkata's trusted IP attorneys for trademark, patent, copyright registration and corporate law. Free first consultation. PAN India filing.",
+    alternates: { canonical: '/' },
     openGraph: page?.meta?.og_image ? { images: [page.meta.og_image] } : undefined,
   }
-}
-
-const structuredData = {
-  '@context': 'https://schema.org',
-  '@type': 'LegalService',
-  name: 'V.S. Arora & Co.',
-  description: 'Advocates, Patent & Trademark Attorneys based in Kolkata',
-  url: 'https://vsarora.com',
-  telephone: '+919123650220',
-  email: 'trademarks@vsarora.com',
-  address: {
-    '@type': 'PostalAddress',
-    streetAddress: '43/C Sri Gopal Mullick Lane',
-    addressLocality: 'Kolkata',
-    addressRegion: 'West Bengal',
-    postalCode: '700012',
-    addressCountry: 'IN',
-  },
-  openingHours: 'Mo-Sa 10:00-19:00',
-  priceRange: 'Free first consultation',
-  areaServed: 'India',
 }
 
 export default async function HomePage() {
@@ -50,10 +32,6 @@ export default async function HomePage() {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
       <Hero cmsHero={heroSection} />
       <StatsStrip cmStats={statsSection} />
       <PracticeAreas />

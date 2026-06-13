@@ -8,8 +8,9 @@ export const revalidate = 3600
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getPage('about')
   return {
-    title: page?.meta?.title ?? 'About Us | V.S. Arora & Co.',
+    title: page?.meta?.title ?? 'About Us',
     description: page?.meta?.description ?? "Meet Adv. Shalini Arora and Adv. Vimesh Arora — the founding team behind VS Arora & Co., Kolkata's IP law specialists with 15+ years of experience.",
+    alternates: { canonical: '/about' },
     openGraph: page?.meta?.og_image ? { images: [page.meta.og_image] } : undefined,
   }
 }
@@ -21,6 +22,23 @@ interface TeamMember {
   title: string
   quote: string
   tags: string[]
+}
+
+interface StaffMember {
+  name: string
+  title: string
+  role: string
+}
+
+function getInitials(name: string): string {
+  const clean = name.replace(/^(Mr\.|Mrs\.|Dr\.|Ms\.)\s+/i, '')
+  return clean.split(' ').slice(0, 2).map(p => p[0]).join('')
+}
+
+function roleBadgeStyle(role: string): { background: string; color: string } {
+  if (role === 'Senior Associate') return { background: '#F5EDD4', color: '#A87820' }
+  if (role === 'Associate') return { background: '#EEF2FF', color: '#4338CA' }
+  return { background: '#F1F5F9', color: '#475569' }
 }
 
 function safeParseArray<T>(json: string | null | undefined): T[] | null {
@@ -51,6 +69,19 @@ const DEFAULT_TEAM: TeamMember[] = [
   },
 ]
 
+const DEFAULT_STAFF: StaffMember[] = [
+  { name: 'Dr. Priti Tayade',      title: 'Patent Attorney',                     role: 'Senior Associate' },
+  { name: 'Mr. Abhilash Shukla',   title: 'Advocate & Trademark Attorney',        role: 'Senior Associate' },
+  { name: 'Mr. Soumya Palo',       title: 'Advocate & Trademark Attorney',        role: 'Senior Associate' },
+  { name: 'Mr. G. Ramji',          title: 'Advocate & Trademark Attorney',        role: 'Senior Associate' },
+  { name: 'Mr. Kapil Jain',        title: 'Advocate & Trademark Attorney',        role: 'Senior Associate' },
+  { name: 'Mr. Jay D. Shah',       title: 'Advocate & Trademark Attorney',        role: 'Associate' },
+  { name: 'Mr. Pankaj Kedia',      title: 'CA, Advocate & Trademark Attorney',    role: 'Associate' },
+  { name: 'Mr. Arkadyuti Sarkar',  title: 'Advocate & Trademark Attorney',        role: 'Associate' },
+  { name: 'Mr. J. Patel',          title: 'Paralegal',                            role: 'Paralegal' },
+  { name: 'Mrs. S. Sarkar',        title: 'Paralegal',                            role: 'Paralegal' },
+]
+
 const DEFAULT_CREDENTIALS = [
   'Bar Council of India',
   'PAN India Filing Network',
@@ -67,6 +98,7 @@ export default async function AboutPage() {
   const mission     = getSection(page, 'about')      // about section = mission content
   const statsFields = getSection(page, 'stats')
   const teamFields  = getSection(page, 'team')
+  const staffFields = getSection(page, 'staff')
   const cta         = getSection(page, 'cta')
 
   const credentials: string[] = safeParseArray<string>(mission.credentials_json) ?? DEFAULT_CREDENTIALS
@@ -79,6 +111,7 @@ export default async function AboutPage() {
   ]
 
   const teamMembers: TeamMember[] = safeParseArray<TeamMember>(teamFields.team_json) ?? DEFAULT_TEAM
+  const staffMembers: StaffMember[] = safeParseArray<StaffMember>(staffFields.staff_json) ?? DEFAULT_STAFF
 
   return (
     <>
@@ -197,6 +230,40 @@ export default async function AboutPage() {
                     ))}
                   </div>
                 </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Associates & Staff */}
+      <section className="rsp-sec" style={{ background: '#FAF7F2' }}>
+        <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
+          <div style={{ marginBottom: '32px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
+              <div style={{ width: '24px', height: '2px', background: '#C49A2A', flexShrink: 0 }} />
+              <span style={{ fontSize: '10.5px', fontWeight: 700, color: '#C49A2A', textTransform: 'uppercase', letterSpacing: '0.14em' }}>Our Associates</span>
+            </div>
+            <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(26px, 4vw, 34px)', fontWeight: 700, color: '#0B1829', lineHeight: 1.2, marginBottom: '12px' }}>
+              {staffFields.title ?? 'Associates & Legal Professionals'}
+            </h2>
+            <p style={{ fontSize: '14px', color: '#64748B', lineHeight: 1.75, maxWidth: '580px' }}>
+              {staffFields.description ?? 'Our team of experienced advocates, patent attorneys, trademark specialists and paralegals work together to deliver comprehensive IP protection for every client.'}
+            </p>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(185px, 1fr))', gap: '14px' }}>
+            {staffMembers.map(member => (
+              <div key={member.name} style={{ background: 'white', borderRadius: '10px', border: '1px solid #EDE9E0', padding: '20px 16px', display: 'flex', flexDirection: 'column', gap: '10px', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
+                <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: '#F5EDD4', border: '2px solid rgba(196,154,42,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '16px', fontWeight: 700, color: '#C49A2A' }}>
+                    {getInitials(member.name)}
+                  </span>
+                </div>
+                <div style={{ display: 'inline-block', fontSize: '9px', fontWeight: 700, padding: '3px 8px', borderRadius: '20px', textTransform: 'uppercase', letterSpacing: '0.08em', alignSelf: 'flex-start', ...roleBadgeStyle(member.role) }}>
+                  {member.role}
+                </div>
+                <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '15.5px', fontWeight: 700, color: '#0B1829', lineHeight: 1.3 }}>{member.name}</div>
+                <div style={{ fontSize: '11.5px', color: '#64748B', lineHeight: 1.5 }}>{member.title}</div>
               </div>
             ))}
           </div>
