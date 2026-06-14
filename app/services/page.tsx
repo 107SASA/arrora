@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { LightbulbIcon, GavelIcon, BuildingIcon, PenToolIcon, WhatsAppIcon, ShieldIcon, GlobeIcon } from '@/components/ui/Icons'
 import { getPage, getSection } from '@/lib/cms'
 
-export const revalidate = 3600
+export const revalidate = false
 
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getPage('services')

@@ -4,7 +4,7 @@ import { MapPinIcon, PhoneIcon, MailIcon, WhatsAppIcon } from '@/components/ui/I
 import { getPage, getSection } from '@/lib/cms'
 import ContactForm from '@/components/contact/ContactForm'
 
-export const revalidate = 3600
+export const revalidate = false
 
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getPage('contact')

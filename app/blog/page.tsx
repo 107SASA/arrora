@@ -3,7 +3,7 @@ import Link from "next/link";
 import { getBlogs } from "@/lib/cms";
 import BlogContent from "@/components/blog/BlogContent";
 
-export const revalidate = 60;
+export const revalidate = false;
 
 export const metadata: Metadata = {
   title: "Legal Articles & Updates | VS Arora & Co.",

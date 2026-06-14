@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { getPage, getSection } from '@/lib/cms'
 
-export const revalidate = 3600
+export const revalidate = false
 import Hero from '@/components/home/Hero'
 import StatsStrip from '@/components/home/StatsStrip'
 import PracticeAreas from '@/components/home/PracticeAreas'

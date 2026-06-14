@@ -3,7 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { getPage, getSection } from '@/lib/cms'
 
-export const revalidate = 3600
+export const revalidate = false
 
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getPage('about')

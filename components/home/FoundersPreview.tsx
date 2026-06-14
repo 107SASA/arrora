@@ -1,12 +1,22 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import { getPage, getSection } from '@/lib/cms'
 
-const founders = [
+interface Founder {
+  photo: string
+  badge: string
+  name: string
+  title: string
+  quote: string
+  tags: string[]
+}
+
+const staticFounders: Founder[] = [
   {
     photo: '/shalini-arora.png',
     badge: 'Founder & Director',
     name: 'Adv. Shalini Arora',
-    titleLine: 'B.A.LL.B · Intellectual Property Law Specialist',
+    title: 'B.A.LL.B · Intellectual Property Law Specialist',
     quote: 'Every small business deserves the same IP protection that large corporates get. We built VS Arora & Co. to make that possible.',
     tags: ['Trademarks', 'Patents', 'Copyright', '15+ Yrs Exp'],
   },
@@ -14,13 +24,24 @@ const founders = [
     photo: '/vimesh-arora.jpg',
     badge: 'Co-Founder & Managing Partner',
     name: 'Adv. Vimesh Arora',
-    titleLine: 'LL.B · Corporate & Litigation Specialist',
+    title: 'LL.B · Corporate & Litigation Specialist',
     quote: "In India's fast-growing economy, your brand is your most valuable asset. Protecting it from day one is not optional — it is essential.",
     tags: ['Litigation', 'Business Law', 'Corporate Law', 'High Court'],
   },
 ]
 
-export default function FoundersPreview() {
+export default async function FoundersPreview() {
+  const page = await getPage('about')
+  const teamFields = getSection(page, 'team')
+
+  let founders: Founder[] = staticFounders
+  if (teamFields.team_json) {
+    try {
+      const parsed = JSON.parse(teamFields.team_json)
+      if (Array.isArray(parsed) && parsed.length > 0) founders = parsed
+    } catch { /* keep static fallback */ }
+  }
+
   return (
     <section className="rsp-sec" style={{ background: '#FAF7F2' }}>
       <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
@@ -72,7 +93,7 @@ export default function FoundersPreview() {
                   {f.name}
                 </div>
                 <div style={{ fontSize: '12px', color: '#64748B', marginBottom: '14px' }}>
-                  {f.titleLine}
+                  {f.title}
                 </div>
                 <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '15px', fontStyle: 'italic', color: '#374151', lineHeight: 1.65, borderLeft: '3px solid #C49A2A', paddingLeft: '14px', marginBottom: '16px' }}>
                   &ldquo;{f.quote}&rdquo;

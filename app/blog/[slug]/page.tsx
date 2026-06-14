@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { getBlog, getBlogs } from "@/lib/cms";
 import ShareButtons from "@/components/blog/ShareButtons";
 
-export const revalidate = 3600;
+export const revalidate = false;
 export const dynamicParams = true;
 
 interface Props {
